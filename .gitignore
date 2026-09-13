@@ -1,0 +1,8 @@
+node_modules/
+.env
+.env.*
+*.log
+.DS_Store
+Thumbs.db
+# Keep local order records private when they contain real customer data.
+data/orders.json

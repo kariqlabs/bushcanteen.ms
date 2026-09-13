@@ -1,0 +1,556 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bush Canteen - Restaurant Management & POS System</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="index.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+  <div class="app-container">
+    
+    <!-- LEFT NAVIGATION SIDEBAR -->
+    <aside class="sidebar">
+      <div class="brand">
+        <img class="brand-logo-image" src="LOGO/LOGO.jpg" alt="Bush Canteen Restaurant logo">
+        <div class="brand-info">
+          <span>POS & Management</span>
+        </div>
+      </div>
+
+      <nav class="nav-menu">
+        <a href="#pos" class="nav-item active" data-tab="pos">
+          <i data-lucide="layout-grid"></i>
+          <span>Food Order</span>
+        </a>
+        <a href="#kds" class="nav-item" data-tab="kds">
+          <i data-lucide="chef-hat"></i>
+          <span>Kitchen Display</span>
+        </a>
+        <a href="#stickers" class="nav-item" data-tab="stickers">
+          <i data-lucide="tag"></i>
+          <span>Packaging Stickers</span>
+        </a>
+        <a href="#reports" class="nav-item" data-tab="reports">
+          <i data-lucide="bar-chart-3"></i>
+          <span>Financial Reports</span>
+        </a>
+        <a href="#history" class="nav-item" data-tab="history">
+          <i data-lucide="clock"></i>
+          <span>Order History</span>
+        </a>
+        <a href="#admin" class="nav-item" data-tab="admin">
+          <i data-lucide="settings"></i>
+          <span>Menu & Staff</span>
+        </a>
+      </nav>
+
+      <!-- Offline Status Banner -->
+      <div class="sidebar-status">
+        <div class="status-indicator online" id="status-indicator"></div>
+        <div class="status-text">
+          <strong id="status-title">System Online</strong>
+          <span id="status-sub">Shiashie Local Network</span>
+        </div>
+      </div>
+
+      <!-- User Profile Card -->
+      <div class="user-card" id="user-card">
+        <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=100&q=85" alt="Isaac Asamoah, Bush Canteen manager" class="user-avatar">
+        <div class="user-details">
+          <h4 id="active-user-name">Isaac Asamoah</h4>
+          <span id="active-user-role">Manager (Admin)</span>
+        </div>
+        <button class="btn-switch-user" id="btn-switch-user" title="Switch User">
+          <i data-lucide="arrow-right-left"></i>
+        </button>
+      </div>
+    </aside>
+
+    <!-- CENTER MAIN CONTENT AREA -->
+    <main class="main-content">
+      
+      <!-- TOP HEADER BAR -->
+      <header class="top-header">
+        <div class="search-box">
+          <i data-lucide="search"></i>
+          <input type="text" id="search-input" placeholder="Search Ghanaian dishes, fast food, drinks...">
+        </div>
+
+        <div class="header-actions">
+          <button class="btn-filter" id="btn-filter">
+            <i data-lucide="sliders-horizontal"></i>
+            <span>Filter</span>
+          </button>
+          
+          <div class="icon-badge">
+            <i data-lucide="bell"></i>
+            <span class="badge-count" id="notification-count">2</span>
+          </div>
+
+          <div class="top-user-pill">
+            <span class="dot-active"></span>
+            <span id="header-user-display">Isaac Asamoah (Manager)</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- TAB 1: POS & FOOD ORDER VIEW -->
+      <section class="tab-view active" id="view-pos">
+
+        <div class="editorial-intro">
+          <div>
+            <span class="intro-eyebrow">BUSH CANTEEN / SIGNATURE TABLE</span>
+            <h1>Local flavour, served with distinction.</h1>
+            <p>Thoughtfully prepared Ghanaian favourites and chef-led plates for every kind of appetite.</p>
+          </div>
+          <div class="intro-mark"><i data-lucide="sparkles"></i><span>4.9<br><small>guest rating</small></span></div>
+        </div>
+        
+        <!-- Explore Categories Section -->
+        <div class="categories-section">
+          <h3>Explore Categories</h3>
+          <div class="category-pills" id="category-pills">
+            <button class="cat-pill active" data-category="All">
+              <span class="cat-icon"></span> All Items
+            </button>
+            <button class="cat-pill" data-category="Local Dishes">
+              <span class="cat-icon"></span> Local Dishes
+            </button>
+            <button class="cat-pill" data-category="Continental Dishes">
+              <span class="cat-icon"></span> Continental Dishes
+            </button>
+            <button class="cat-pill" data-category="Bar">
+              <span class="cat-icon"></span> Bar
+            </button>
+            </button>
+          </div>
+        </div>
+
+        <!-- Section Title & Sub-tabs -->
+        <div class="section-sub-header">
+          <div class="sub-tabs">
+            <button class="sub-tab active" data-sub="popular">Popular Dishes</button>
+            <button class="sub-tab" data-sub="all">Full Menu</button>
+          </div>
+          <span class="items-count-label" id="items-count-label">Showing 10 items</span>
+        </div>
+
+        <!-- Food Cards Grid -->
+        <div class="food-grid" id="food-grid">
+          <!-- Food cards populated dynamically via app.js -->
+        </div>
+      </section>
+
+      <!-- TAB 2: KITCHEN DISPLAY SYSTEM (KDS) -->
+      <section class="tab-view" id="view-kds">
+        <div class="view-header">
+          <div>
+            <h2>Kitchen Display System (KDS)</h2>
+            <p>Real-time order ticket updates for kitchen food preparation</p>
+          </div>
+          <button class="btn-primary" id="btn-refresh-kds">
+            <i data-lucide="refresh-cw"></i> Refresh Tickets
+          </button>
+        </div>
+        <div class="kds-grid" id="kds-grid">
+          <!-- Live KDS Ticket Cards -->
+        </div>
+      </section>
+
+      <!-- TAB 3: PACKAGING STICKERS GENERATOR -->
+      <section class="tab-view" id="view-stickers">
+        <div class="view-header">
+          <div>
+            <h2>Automated Packaging Sticker Generator</h2>
+            <p>Generate & print thermal labels for takeaway food containers</p>
+          </div>
+        </div>
+        <div class="stickers-container" id="stickers-container">
+          <!-- Packaging stickers list -->
+        </div>
+      </section>
+
+      <!-- TAB 4: FINANCIAL REPORTS & ANALYTICS -->
+      <section class="tab-view" id="view-reports">
+        <div class="view-header">
+          <div>
+            <h2>Financial Reports & Operating Analytics</h2>
+            <p>Real-time daily sales revenue vs. daily operating expenditures</p>
+          </div>
+          <button class="btn-primary" id="btn-add-expense">
+            <i data-lucide="plus"></i> Add Expenditure
+          </button>
+        </div>
+
+        <!-- Summary Metric Cards -->
+        <div class="metrics-grid">
+          <div class="metric-card sales">
+            <div class="metric-icon"><i data-lucide="trending-up"></i></div>
+            <div class="metric-info">
+              <span>Total Daily Sales Revenue</span>
+              <h3 id="metric-sales">GHS 0.00</h3>
+              <small id="metric-orders-count">0 orders today</small>
+            </div>
+          </div>
+
+          <div class="metric-card expenses">
+            <div class="metric-icon"><i data-lucide="receipt"></i></div>
+            <div class="metric-info">
+              <span>Total Daily Operating Expenses</span>
+              <h3 id="metric-expenses">GHS 0.00</h3>
+              <small id="metric-expense-count">3 entries today</small>
+            </div>
+          </div>
+
+          <div class="metric-card profit">
+            <div class="metric-icon"><i data-lucide="dollar-sign"></i></div>
+            <div class="metric-info">
+              <span>Net Daily Operating Profit</span>
+              <h3 id="metric-net-profit">GHS 0.00</h3>
+              <small>Real-time margin calculation</small>
+            </div>
+          </div>
+
+          <div class="metric-card customers">
+            <div class="metric-icon"><i data-lucide="users"></i></div>
+            <div class="metric-info">
+              <span>Daily Customer Headcount</span>
+              <h3 id="metric-headcount">0</h3>
+              <small>Estimated customer visits</small>
+            </div>
+          </div>
+        </div>
+
+        <!-- Breakdown Tables -->
+        <div class="reports-layout">
+          <div class="report-box">
+            <h3>Payment Method Revenue Breakdown</h3>
+            <div class="breakdown-list" id="payment-breakdown-list">
+              <!-- Payment breakdown rows -->
+            </div>
+          </div>
+
+          <div class="report-box">
+            <h3>Low Stock Inventory Alerts</h3>
+            <div class="alerts-list" id="stock-alerts-list">
+              <!-- Stock alerts -->
+            </div>
+          </div>
+        </div>
+
+        <div class="report-box full-width">
+          <h3>Daily Operating Expense Log</h3>
+          <table class="data-table" id="expenses-table">
+            <thead>
+              <tr>
+                <th>Time</th>
+                <th>Description</th>
+                <th>Category</th>
+                <th>Recorded By</th>
+                <th>Amount (GHS)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Expense rows -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- TAB 5: ORDER HISTORY -->
+      <section class="tab-view" id="view-history">
+        <div class="view-header">
+          <div>
+            <h2>Complete Order History</h2>
+            <p>Audit trail of all walk-in and online transactions</p>
+          </div>
+        </div>
+        <div class="report-box full-width">
+          <table class="data-table" id="history-table">
+            <thead>
+              <tr>
+                <th>Order ID</th>
+                <th>Type</th>
+                <th>Table / Customer</th>
+                <th>Staff Taker</th>
+                <th>Payment</th>
+                <th>Total (GHS)</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- History rows -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- TAB 6: MENU & STAFF ADMIN MANAGEMENT -->
+      <section class="tab-view" id="view-admin">
+        <div class="view-header">
+          <div>
+            <h2>Menu & Staff Admin Control</h2>
+            <p>Manage Ghanaian dishes, prices, stock levels & staff accounts</p>
+          </div>
+          <button class="btn-primary" id="btn-add-menu-item">
+            <i data-lucide="plus"></i> Add Menu Item
+          </button>
+        </div>
+
+        <div class="report-box full-width">
+          <h3>Active Dish Menu Management</h3>
+          <table class="data-table" id="admin-menu-table">
+            <thead>
+              <tr>
+                <th>Dish Item</th>
+                <th>Category</th>
+                <th>Small Price</th>
+                <th>Large Price</th>
+                <th>Stock Qty</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Menu admin rows -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- RIGHT CART & INVOICE SIDEBAR -->
+    <aside class="cart-sidebar">
+      <div class="cart-header">
+        <div>
+          <h2>Invoice Summary</h2>
+          <span class="order-id-tag" id="current-order-tag">Order #BC-NEW</span>
+        </div>
+        <button class="btn-clear-cart" id="btn-clear-cart" title="Clear Order">
+          <i data-lucide="trash-2"></i>
+        </button>
+      </div>
+
+      <!-- Order Type Switcher Pills -->
+      <div class="order-type-toggle">
+        <button class="type-pill active" data-type="Eat-In">
+          <i data-lucide="utensils"></i> Eat-In
+        </button>
+        <button class="type-pill" data-type="Takeaway">
+          <i data-lucide="shopping-bag"></i> Takeaway
+        </button>
+        <button class="type-pill" data-type="Online">
+          <i data-lucide="globe"></i> Online
+        </button>
+      </div>
+
+      <!-- Staff & Table Reference Controls -->
+      <div class="order-meta-controls">
+        <div class="input-field">
+          <label><i data-lucide="user"></i> Order Taker Staff</label>
+          <select id="staff-taker-select">
+            <option value="Isaac Asamoah">Isaac Asamoah (Manager)</option>
+            <option value="Kwame Mensah">Kwame Mensah (Cashier)</option>
+            <option value="Abena Osei">Abena Osei (Cashier)</option>
+          </select>
+        </div>
+
+        <div class="input-field">
+          <label><i data-lucide="table"></i> Table / Customer Ref</label>
+          <input type="text" id="table-ref-input" value="Table 1" placeholder="e.g. Table 4 / Order #">
+        </div>
+      </div>
+
+      <!-- Cart Items List -->
+      <div class="cart-items-container" id="cart-items-container">
+        <!-- Dynamically populated cart items -->
+        <div class="empty-cart-state" id="empty-cart-state">
+          <i data-lucide="shopping-cart"></i>
+          <p>Your order cart is empty</p>
+          <small>Tap food items on the menu grid to add to order</small>
+        </div>
+      </div>
+
+      <!-- Billing Summary Box -->
+      <div class="cart-billing">
+        <div class="bill-row">
+          <span>Sub Total</span>
+          <strong id="bill-subtotal">GHS 0.00</strong>
+        </div>
+        <div class="bill-row">
+          <span>Tax / Service Fee</span>
+          <span>GHS 0.00</span>
+        </div>
+        <div class="bill-row total">
+          <span>Total Payment</span>
+          <strong id="bill-total">GHS 0.00</strong>
+        </div>
+
+        <!-- Payment Method Selection -->
+        <div class="payment-methods-header">
+          <span>Select Payment Method ("Pay Before Eating")</span>
+        </div>
+        <div class="payment-methods-grid">
+          <button class="pay-method-btn active" data-method="Cash">
+            <i data-lucide="banknote"></i>
+            <span>Cash</span>
+          </button>
+          <button class="pay-method-btn" data-method="Mobile Money">
+            <i data-lucide="smartphone"></i>
+            <span>MoMo</span>
+          </button>
+          <button class="pay-method-btn" data-method="POS Card">
+            <i data-lucide="credit-card"></i>
+            <span>POS Card</span>
+          </button>
+        </div>
+
+        <!-- Primary Action Button -->
+        <button class="btn-checkout" id="btn-checkout" disabled>
+          <span>Place Order & Pay</span>
+          <i data-lucide="arrow-right"></i>
+        </button>
+      </div>
+    </aside>
+
+  </div>
+
+  <!-- MODAL 1: PAYMENT CONFIRMATION ("PAY BEFORE EATING") -->
+  <div class="modal-overlay" id="modal-payment">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3><i data-lucide="check-circle-2"></i> Confirm Payment ("Pay Before Eating")</h3>
+        <button class="btn-close-modal" data-close="modal-payment"><i data-lucide="x"></i></button>
+      </div>
+      <div class="modal-body">
+        <div class="payment-amount-display">
+          <span>Total Due</span>
+          <h2 id="modal-pay-due">GHS 0.00</h2>
+        </div>
+
+        <!-- Payment Method Specific Inputs -->
+        <div id="payment-cash-inputs" class="pay-inputs-group">
+          <label>Cash Received (GHS)</label>
+          <input type="number" id="cash-received-input" placeholder="Enter cash tendered" step="5">
+          <div class="quick-cash-buttons">
+            <button class="btn-chip" data-cash="20">GHS 20</button>
+            <button class="btn-chip" data-cash="50">GHS 50</button>
+            <button class="btn-chip" data-cash="100">GHS 100</button>
+            <button class="btn-chip" data-cash="200">GHS 200</button>
+          </div>
+          <div class="change-display">
+            <span>Change Due to Customer:</span>
+            <strong id="cash-change-display">GHS 0.00</strong>
+          </div>
+        </div>
+
+        <div id="payment-momo-inputs" class="pay-inputs-group hidden">
+          <label>Mobile Money Network Provider</label>
+          <select id="momo-provider">
+            <option value="MTN MoMo">MTN Mobile Money</option>
+            <option value="Telecel Cash">Telecel Cash</option>
+            <option value="AT Money">AT Money</option>
+          </select>
+          <label style="margin-top:10px;">MoMo Transaction Reference / Phone</label>
+          <input type="text" id="momo-ref-input" placeholder="e.g. 0244123456 / TXN987654">
+        </div>
+
+        <div id="payment-pos-inputs" class="pay-inputs-group hidden">
+          <label>POS Card Terminal Ref</label>
+          <input type="text" id="pos-ref-input" placeholder="e.g. STANBIC-POS-8841">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" data-close="modal-payment">Cancel</button>
+        <button class="btn-primary" id="btn-confirm-payment">Complete Payment & Print</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 2: PACKAGING STICKER PREVIEW & PRINT -->
+  <div class="modal-overlay" id="modal-sticker-preview">
+    <div class="modal-box sticker-modal">
+      <div class="modal-header">
+        <h3><i data-lucide="tag"></i> Packaging Sticker Label Preview</h3>
+        <button class="btn-close-modal" data-close="modal-sticker-preview"><i data-lucide="x"></i></button>
+      </div>
+      <div class="modal-body">
+        <div class="thermal-sticker-preview" id="thermal-sticker-preview">
+          <!-- Rendered thermal sticker tag -->
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" data-close="modal-sticker-preview">Close</button>
+        <button class="btn-primary" id="btn-print-sticker">
+          <i data-lucide="printer"></i> Print Sticker Label
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 3: MANAGER ADMIN PIN VERIFICATION -->
+  <div class="modal-overlay" id="modal-pin">
+    <div class="modal-box pin-modal">
+      <div class="modal-header">
+        <h3><i data-lucide="shield-alert"></i> Manager Authorization Required</h3>
+        <button class="btn-close-modal" data-close="modal-pin"><i data-lucide="x"></i></button>
+      </div>
+      <div class="modal-body text-center">
+        <p>Please enter Manager PIN (Isaac Asamoah) to proceed:</p>
+        <input type="password" id="manager-pin-input" maxlength="4" placeholder="••••" class="pin-input">
+        <small class="error-msg" id="pin-error-msg"></small>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" data-close="modal-pin">Cancel</button>
+        <button class="btn-primary" id="btn-submit-pin">Authorize Action</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 4: ADD EXPENDITURE -->
+  <div class="modal-overlay" id="modal-expense">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3><i data-lucide="receipt"></i> Record Daily Business Expenditure</h3>
+        <button class="btn-close-modal" data-close="modal-expense"><i data-lucide="x"></i></button>
+      </div>
+      <div class="modal-body">
+        <div class="input-field">
+          <label>Expense Description</label>
+          <input type="text" id="exp-desc-input" placeholder="e.g. Cooking Oil, Vegetables, Gas Cylinder">
+        </div>
+        <div class="input-field">
+          <label>Category</label>
+          <select id="exp-cat-select">
+            <option value="Food Ingredients">Food Ingredients & Fresh Produce</option>
+            <option value="Utilities">Utilities (Gas, Electricity, Water)</option>
+            <option value="Packaging">Takeaway Packaging & Disposables</option>
+            <option value="Transport">Transportation & Logistics</option>
+            <option value="Maintenance">Maintenance & Repairs</option>
+          </select>
+        </div>
+        <div class="input-field">
+          <label>Amount (GHS)</label>
+          <input type="number" id="exp-amount-input" placeholder="0.00" step="10">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" data-close="modal-expense">Cancel</button>
+        <button class="btn-primary" id="btn-save-expense">Save Expense Record</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+  <script>
+    lucide.createIcons();
+  </script>
+</body>
+</html>
