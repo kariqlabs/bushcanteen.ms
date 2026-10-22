@@ -1,119 +1,102 @@
-# Bush Canteen
+# Bush Canteen POS
 
-Premium Ghanaian restaurant POS and operations dashboard with a responsive frontend, local REST API, order persistence, and printable receipts.
+A browser-based point-of-sale prototype for a Ghanaian restaurant. The project pairs a responsive menu and cart interface with a small Express API for menu data, order records, and printable receipts.
 
-## Features
+> **Prototype only:** This repository is for local evaluation and learning. It is not ready for production use or real customer/payment records. See [Security and Limitations](#security-and-limitations).
 
-- Responsive POS experience for phones, tablets, and desktop screens
-- Ghanaian local menu with restaurant photography and category filtering
-- Cart with quantity controls, order type, staff, and customer/table reference
-- Kitchen Display, packaging stickers, financial reports, history, and admin tabs
-- Express backend with menu, health, order, and receipt endpoints
-- Server-side menu price validation before an order is saved
-- JSON order persistence in `data/orders.json`
-- Print-ready HTML receipts generated from saved orders
-- Premium glass interface with subtle reveal and hover motion
+## Capabilities
 
-## Stack
+- Browse a menu of Ghanaian dishes, continental dishes, and drinks.
+- Search and filter menu items, build a cart, and choose order metadata.
+- Create an order using menu IDs; the server looks up menu records and calculates line totals.
+- Store orders in a local JSON file and retrieve them from the API.
+- Generate a printable HTML receipt for a saved order.
 
-- Frontend: semantic HTML, CSS, vanilla JavaScript, Lucide icons
-- Backend: Node.js 18+, Express
-- Storage: JSON files for a zero-setup local deployment
+Kitchen tickets, inventory, expense reporting, staff administration, user authentication, and payment-provider integration are not implemented by the current Express API. Dashboard areas that suggest these functions should be treated as prototype UI, not operational controls.
+
+## Technology
+
+- **Frontend:** HTML, CSS, vanilla JavaScript
+- **Backend:** Node.js 18+, Express 4
+- **Persistence:** Local JSON files
 
 ## Run Locally
 
-1. Install Node.js 18 or newer.
-2. Open a terminal in this folder.
-3. Install dependencies:
+### Requirements
+
+- Node.js 18 or newer
+- npm
+
+### Setup
 
 ```bash
+git clone https://github.com/kariqlabs/bushcanteen.ms.git
+cd bushcanteen.ms
 npm install
-```
-
-4. Start the application:
-
-```bash
 npm start
 ```
 
-5. Open [http://localhost:3000](http://localhost:3000).
+Open [http://localhost:3000](http://localhost:3000). Do not open `BushCanteen.html` directly; the frontend needs the Express server for API requests.
 
-For development with automatic server restarts:
+For automatic restarts while developing:
 
 ```bash
 npm run dev
 ```
 
-Do not open `BushCanteen.html` directly for ordering. Use the Express URL so the frontend can reach the API.
+## API
 
-## API Reference
+The API reference is available in [API.md](API.md).
 
-### `GET /api/health`
+| Method | Endpoint | Purpose |
+| --- | --- | --- |
+| `GET` | `/api/health` | Return service health |
+| `GET` | `/api/menu` | Return the menu and prices |
+| `GET` | `/api/orders` | Return saved orders, newest first |
+| `POST` | `/api/orders` | Create and persist an order |
+| `GET` | `/api/orders/:id/receipt` | Return a printable receipt |
 
-Returns service status.
-
-```json
-{"status":"ok","service":"bush-canteen-api"}
-```
-
-### `GET /api/menu`
-
-Returns the server-approved menu and prices.
-
-### `GET /api/orders`
-
-Returns saved orders, newest first.
-
-### `POST /api/orders`
-
-Creates and persists a paid order. Prices are always resolved from the server menu.
-
-Example request:
+Example request with synthetic data:
 
 ```json
 {
-  "items": [{"id":"banku-tilapia","quantity":1}],
-  "paymentMethod":"Cash",
-  "orderType":"Eat-In",
-  "customerRef":"Table 4",
-  "staff":"Isaac Asamoah"
+  "items": [{ "id": "banku-tilapia", "quantity": 1 }],
+  "paymentMethod": "Cash",
+  "orderType": "Eat-In",
+  "customerRef": "Sample Table 4",
+  "staff": "Counter Operator"
 }
 ```
 
-Example response fields:
+The current server requires a non-empty `items` array and a valid menu item ID. It normalizes invalid or missing quantities to at least one. The server marks created orders `Paid` based on the submitted request; it does not verify that a payment occurred.
 
-```json
-{
-  "order": {"id":"BC-1234","status":"Paid","total":65},
-  "receiptUrl":"/api/orders/BC-1234/receipt"
-}
-```
-
-### `GET /api/orders/:id/receipt`
-
-Returns a print-ready HTML receipt and opens the browser print dialog when loaded.
-
-## Project Layout
+## Project Structure
 
 ```text
-BushCanteen.html       Responsive restaurant dashboard shell
-index.css              Glass/premium responsive design system
-app.js                 Menu, cart, navigation, checkout and API client
-server.js              Express server and REST API
-data/menu.json         Server-approved menu and pricing
+BushCanteen.html       POS dashboard markup
+index.css              Responsive interface styles
+app.js                 Menu, cart, navigation, and API client
+server.js              Express routes and receipt rendering
+data/menu.json         Menu records and prices
 data/orders.json       Local order persistence
-IMAGES OF THE FOODS/  Menu photography
-LOGO/                  Bush Canteen restaurant logo
-package.json           Node scripts and dependencies
+API.md                 API endpoint notes
+bar/                   Drink photography
+continental dishes/    Food photography
+IMAGES OF THE FOODS/   Food photography
+LOGO/                  Restaurant logo asset
 ```
 
-## Production Notes
+## Security and Limitations
 
-This starter backend intentionally uses JSON storage for easy local use. Before public deployment, move orders to PostgreSQL or another transactional database, add authentication and roles, validate payment through a payment provider, protect admin routes, and store secrets in environment variables.
+- There is no authentication or role-based authorization. The order-list endpoint exposes saved records to anyone who can reach the server.
+- Payment methods are recorded as order fields; no bank, Mobile Money, or card transaction is verified.
+- Orders are stored by rewriting a JSON file. This is not transactional storage and does not provide safe multi-user concurrency, automated backups, or recovery guarantees.
+- The current receipt builder inserts order fields into HTML without escaping. Do not submit untrusted or real personal data.
+- The server is configured for local development and does not provide HTTPS or production access controls.
+- `tests/test_backend.py` targets a separate Python backend, not this Express API; automated Node API tests are not currently configured.
 
-## GitHub Checklist
+Before any real deployment, add authentication and authorization, integrate verified payments, use durable transactional storage, escape all rendered data, configure HTTPS, establish backups and retention, and add automated tests for successful and failed requests.
 
-- Keep `data/orders.json` out of public repositories if it contains real customer information.
-- Add environment-specific configuration through `.env` files that are ignored by Git.
-- Run `npm install` and `npm start` after cloning.
-- Deploy the Node server and serve the dashboard from the same origin so `/api` routes work without CORS configuration.
+## Project Status
+
+Local prototype. No production deployment or payment integration is provided by this repository.
